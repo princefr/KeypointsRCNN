@@ -2,7 +2,6 @@ import random
 import torch
 
 from torchvision.transforms import functional as F
-import albumentations as albu
 import numbers
 
 
@@ -32,15 +31,7 @@ class Compose(object):
         return image, target
 
 
-def create_transformation(transformation, image, keypoints, probability=0.5):
-    return albu.Compose(transformation, p=1,  keypoint_params=albu.KeypointParams(format='xy'))(image=image, keypoints=keypoints)
 
-class VerticalFlip(object):
-    def __init__(self, prob):
-        self.prob = prob
-
-    def __call__(self, image, target):
-        print()
 
 
 

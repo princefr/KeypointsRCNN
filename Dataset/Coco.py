@@ -1,6 +1,4 @@
 import torch
-import cv2
-import torchvision
 from pycocotools.coco import COCO
 import os.path as ops
 from PIL import Image
