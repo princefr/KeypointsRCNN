@@ -52,7 +52,7 @@ def collate_fn(batch):
     return tuple(zip(*batch))
 
 
-
+train_sampler = None
 if xm.xrt_world_size() > 1:
   train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset, num_replicas=xm.xrt_world_size(), rank=xm.get_ordinal(),shuffle=True)
 
@@ -119,10 +119,10 @@ optimizer = torch.optim.SGD(params, lr=lr, momentum=0.9, weight_decay=0.0005) # 
 
 
 # and a learning rate scheduler
-lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=15, gamma=0.1)
+lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
 # let's train it for 10 epochs
-num_epochs = 30
+num_epochs = 60
 
 
 for epoch in range(0, num_epochs):
@@ -130,8 +130,7 @@ for epoch in range(0, num_epochs):
     # train for one epoch, printing every 10 iterations
     train_one_epoch(model, optimizer, train_loader, device, epoch, print_freq=5000)
 
-    tracker.add(64)
-
+    tracker.add(32)
     # update the learning rate
     lr_scheduler.step()
     # evaluate on the test dataset
